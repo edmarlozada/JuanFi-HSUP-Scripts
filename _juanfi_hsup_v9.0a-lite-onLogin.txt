@@ -17,7 +17,7 @@ local eMail ($aUser->"email")
 
 # Check Valid Entry via EMail
 if (!($eMail~"active")) do={
-  local eReplace do={loca iRet; loca x;for i from=0 to=([len $1]-1) do={set x [pick $1 $i];if ($x=$2) do={set x $3};set iRet ($iRet.$x)}; return $iRet}
+  local eReplace do={local iRet; local x;for i from=0 to=([len $1]-1) do={set x [pick $1 $i];if ($x=$2) do={set x $3};set iRet ($iRet.$x)}; return $iRet}
 
   # Variables Module
   local iVer1 "v9.0a"; local iVer2 "lite"
@@ -52,7 +52,7 @@ if (!($eMail~"active")) do={
   # Add User Scheduler Module
   if ([/system scheduler find name=$iUser]="") do={
     /system scheduler add name=$iUser interval=0
-    loca i 10;while (([/system scheduler find name=$iUser]="")&&($i>0)) do={set i ($i-1);delay 1s}
+    local i 10;while (([/system scheduler find name=$iUser]="")&&($i>0)) do={set i ($i-1);delay 1s}
   }
 
   # Cancel User-Login if user-scheduler NOT FOUND!
@@ -95,7 +95,7 @@ if (!($eMail~"active")) do={
       local iUser $1; local iSaleAmt $2; local iSalesName $3; local iSalesComment $4; local iTotalAmt 0
       if ([/system script find name=$iSalesName]="") do={
         /system script add name=$iSalesName source="0"
-        loca i 10;while (([/system script find name=$iSalesName]="")&&($i>0)) do={set i ($i-1);delay 1s}
+        local i 10;while (([/system script find name=$iSalesName]="")&&($i>0)) do={set i ($i-1);delay 1s}
       }
       if ([/system script find name=$iSalesName]!="") do={
         set iTotalAmt ($iSaleAmt + [tonum [/system script get [find name=$iSalesName] source]])
@@ -112,12 +112,12 @@ if (!($eMail~"active")) do={
       if ([/file find name="$iRoot"]!="") do={
       if ([/file find name="$iRoot/$iPath"]="") do={
         do { /tool fetch dst-path=("$iRoot/$iPath/.") url="https://127.0.0.1/" } on-error={ }
-        loca i 10;while (([/file find name="$iRoot/$iPath"]="")&&($i>0)) do={set i ($i-1);delay 1s}
+        local i 10;while (([/file find name="$iRoot/$iPath"]="")&&($i>0)) do={set i ($i-1);delay 1s}
       }
       } else={ log error ("   ( $iUser ) ONLOGIN ERROR! /file [$iRoot] => ROOT NOT FOUND!") }
       if ([/file find name="$iRoot/$iPath"]!="") do={
         /file print file="$iRoot/$iPath/$iFile.txt" where name="$iFile.txt"
-        loca i 10;while (([/file find name="$iRoot/$iPath/$iFile.txt"]="")&&($i>0)) do={set i ($i-1);delay 1s}
+        local i 10;while (([/file find name="$iRoot/$iPath/$iFile.txt"]="")&&($i>0)) do={set i ($i-1);delay 1s}
       } else={ log error ("   ( $iUser ) ONLOGIN ERROR! /file [$iRoot/$iPath] => PATH NOT FOUND!") }
       if ([/file find name="$iRoot/$iPath/$iFile.txt"]!="") do={
         /file set "$iRoot/$iPath/$iFile.txt" contents=$iContent
