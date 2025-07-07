@@ -23,7 +23,7 @@
 
 ### Tested On:
 - hAP Lite 6.48.7 Stable
-- hEX GR3 7.12.1 Stable
+- hEX GR3 7.19.1 Stable
 - RB5009 7.8 Long Term
 - CCR1009 6.49.10 Long Term
 
