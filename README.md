@@ -2,10 +2,6 @@
 - no need to define hotspot folder! (copyright)
 
 ### What's new (2025-07-07)
-- iShowLogs 1 ;# Show Details on Log
-- iAddFiles 1 ;# Add User Data File
-- iAddSales 1 ;# Add Sales Today/Month
-- iFixLogin 1 ;# Fix Random MAC Login
 - now compatible with JuanFi Manager APK
 - uses user-email to check valid entry
 - cancel user-login if scheduler not created
@@ -15,7 +11,6 @@
 - system scheduler on-event minimize/with logs
 - fix bug on validity ( if Validity <= UserTime )
 - create logs for New/Extend user
-- show login details on log
 - show login error on log
 - auto create data folder if missing
 - auto create sales file if missing
@@ -83,7 +78,6 @@ if (!($eMail~"active")) do={
   local iActMail "$iFileMac@juanfi.$iVer1.active"
   local iRoot    [/ip hotspot profile get [.. get [find interface=$iDevInt] profile] html-directory]
   local iCode "NEW"; if ($iExtCode=1) do={ set iCode "EXT" }
-  log warning ("JuanFi-$iCode => user=[ $iUser ] ip=[ $iDevIP ] mac=[ $iDevMac ] interface=[ $iDevInt ] comment=[ $iComment ]")
 
   # Invalid Comment Module
   if (!($iValidty>=0 && $iSaleAmt>=0 && ($iExtCode=0 || $iExtCode=1))) do={
@@ -130,8 +124,6 @@ if (!($eMail~"active")) do={
   # Set User Scheduler on-event Module
   local iEvent ("# JuanFi $iVer1 $iVer2 #\r\n".\
                 "/ip hotspot active remove [find user=\"$iUser\"]\r\n".\
-                "local iType \"Validity\"; if ([len \$1]>0) do={ set iType \$1 };\r\n".\
-                "log debug (\"JuanFi-EXP ( \$iType ) => user=[ $iUser ] ip=[ $iDevIP ] mac=[ $iDevMac ]\")\r\n".\
                 "/ip hotspot cookie remove [find user=\"$iUser\"]\r\n".\
                 "/ip hotspot cookie remove [find mac-address=\"$iDevMac\"]\r\n".\
                 "/system scheduler  remove [find name=\"$iUser\"]\r\n".\
@@ -217,8 +209,7 @@ local iUseTime ($aUser->"uptime")
 
 # Check Expiration
 if ($cause="traffic limit reached" || (($iUsrTime>0) && ($iUsrTime<=$iUseTime))) do={
-  local iSSched [parse [/system scheduler get [find name=$iUser] on-event]]
-  $iSSched "TimeLimit"
+  [parse [/system scheduler get [find name=$iUser] on-event]]
 }
 
 ```
