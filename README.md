@@ -1,13 +1,13 @@
-## JuanFi onLogin/onLogout v9.0a ( lite )
+## JuanFi onLogin/onLogout v9.0b ( lite )
 - no need to define hotspot folder! (copyright)
 
-### What's new (2025-07-07)
+### What's new (2025-07-09)
 - now compatible with JuanFi Manager APK
 - uses user-email to check valid entry
 - cancel user-login if scheduler not created
 - cancel user-login if invalid user comment
 
-### What's in v9.0a ( lite )
+### What's in v9.0b ( lite )
 - system scheduler on-event minimize/with logs
 - fix bug on validity ( if Validity <= UserTime )
 - create logs for New/Extend user
@@ -38,7 +38,7 @@
 
 ### Follow these steps:
 
-#### Step 1: Copy script below and paste to hotspot user profile onLogin. ( _juanfi_hs_v9.0a-lite-onLogin.txt )
+#### Step 1: Copy script below and paste to hotspot user profile onLogin. ( _juanfi_hs_v9.0b-lite-onLogin.txt )
 ```bash
 # JuanFi onLogin v9.0b lite
 # by: Chloe Renae & Edmar Lozada
@@ -201,9 +201,9 @@ if (1) do={
 
 ```
 
-#### Step 2: Copy script below and paste to hotspot user profile onLogout. ( _juanfi_hs_v9.0a-lite-onLogout.txt )
+#### Step 2: Copy script below and paste to hotspot user profile onLogout. ( _juanfi_hs_v9.0b-lite-onLogout.txt )
 ```bash
-# JuanFi onLogout v9.0a lite
+# JuanFi onLogout v9.0b lite
 # by: Chloe Renae & Edmar Lozada
 # ------------------------------
 
