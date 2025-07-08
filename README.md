@@ -40,9 +40,12 @@
 
 #### Step 1: Copy script below and paste to hotspot user profile onLogin. ( _juanfi_hs_v9.0a-lite-onLogin.txt )
 ```bash
-# JuanFi onLogin v9.0a lite
+# JuanFi onLogin v9.0b lite
 # by: Chloe Renae & Edmar Lozada
 # ------------------------------
+
+# ( 0=NO / 1=YES ) #
+local cfgShowLogs 1 ;# Show Log Debug on Logs
 
 local cfgTelegram 0 ;# Send Login Details to Telegram
 # Telegram Group Chat ID
@@ -53,16 +56,17 @@ local cfgTGBToken "xxxxxxxxxx:xxxxxxxxxxxxx-xxxxxxxxxxxxxxx-xxxxx"
 # ------------------------------ #
 # Do NOT Edit below this point   #
 # ------------------------------ #
-local iUser $user
+local iUser $username
 local aUser [/ip hotspot user get $iUser]
 local eMail ($aUser->"email")
 
 # Check Valid Entry via EMail
 if (!($eMail~"active")) do={
   local eReplace do={local iRet; local x;for i from=0 to=([len $1]-1) do={set x [pick $1 $i];if ($x=$2) do={set x $3};set iRet ($iRet.$x)}; return $iRet}
+  local eLogDebug do={ if ($2) do={ log debug $1 } }
 
   # Variables Module
-  local iVer1 "v9.0a"; local iVer2 "lite"
+  local iVer1 "v9.0b"; local iVer2 "lite"
   local iDevIP   $address
   local iDevMac  $"mac-address"
   local iDevInt  $interface
@@ -78,14 +82,15 @@ if (!($eMail~"active")) do={
   local iActMail "$iFileMac@juanfi.$iVer1.active"
   local iRoot    [/ip hotspot profile get [.. get [find interface=$iDevInt] profile] html-directory]
   local iCode "NEW"; if ($iExtCode=1) do={ set iCode "EXT" }
+  $eLogDebug ("JuanFi-$iCode => user=[ $iUser ] ip=[ $iDevIP ] mac=[ $iDevMac ] interface=[ $iDevInt ] comment=[ $iComment ]") $cfgShowLogs
 
   # Invalid Comment Module
   if (!($iValidty>=0 && $iSaleAmt>=0 && ($iExtCode=0 || $iExtCode=1))) do={
     if ([/system scheduler find name=$iUser]!="") do={
-      log error ("   ( $iUser ) ONLOGIN UPDATE! email=[$iActMail] comment=[$iComment] => UPDATE ACTIVE USER EMAIL!")
+      log debug ("   ( $iUser ) OnLogin UPDATE: Active User Email! => email=[$iActMail] comment=[$iComment]")
       /ip hotspot user set [find name=$iUser] email=$iActMail; return ""
     } else={
-      log error ("   ( $iUser ) ONLOGIN ERROR! email=[$eMail] comment=[$iComment] => NO SCHEDULER/INVALID COMMENT!")
+      log error ("   ( $iUser ) OnLogin ERROR: No Scheduler/Invalid Comment! => email=[$eMail] comment=[$iComment]")
       # what is the policy on user with invalid comment and/or no scheduler
       /ip hotspot user set [find name=$iUser] email=$iActMail comment="NO SCHEDULER"; return ""
     }
@@ -99,31 +104,35 @@ if (!($eMail~"active")) do={
 
   # Cancel User-Login if user-scheduler NOT FOUND!
   if ([/system scheduler find name=$iUser]="") do={
-    log error ("   ( $iUser ) ONLOGIN ERROR! email=[$eMail] comment=[$iComment] => SCHEDULER NOT FOUND!")
+    log error ("   ( $iUser ) OnLogin ERROR: Scheduler Not Found! => email=[$eMail] comment=[$iComment]")
     /ip hotspot active remove [find user=$iUser]; return ""
   }
 
   # User Validity/Interval/Comment/eMail/BugFix Module
-  local cUsrTime "NO-LIMIT"; local cValidty "NO-EXPIRY"
+  local cUsrTime "NO-LIMIT"; local cValidty "NO-VALIDITY"
   set iValidty ($iValidty + [/system scheduler get [find name=$iUser] interval])
   if ($iValidty!=0s && $iValidty<=$iUsrTime) do={ set iValidty ($iUsrTime+30s) }; #BugFix ( Validity <= UserTime )
   /syste scheduler set [find name=$iUser] interval=$iValidty
   /ip hotspot user set [find name=$iUser] email=$iActMail comment=""
   if ($iUsrTime>0) do={ set cUsrTime $iUsrTime }
   if ($iValidty>0) do={ set cValidty $iValidty }
+  $eLogDebug ("   ( $iUser ) usertime=[ $cUsrTime ] validity=[ $cValidty ] amt=[ $iSaleAmt ] vendo=[ $iVendTag ] email=[ $eMail ] folder=[ $iRoot ]") $cfgShowLogs
 
   # User Expire Module
-  local iUserBeg; local iUserExp "NO EXPIRATION"
+  local iUserBeg; local iUserExp "NO-EXPIRY"
   local aSySched [/system scheduler get $iUser]
   local iNextRun ($aSySched->"next-run")
   set   iUserBeg (($aSySched->"start-date")." ".($aSySched->"start-time"))
   if ([len $iNextRun]>1) do={
     set iUserExp [pick $iNextRun 0 ([len $iNextRun]-3)]
   }
+  $eLogDebug ("   ( $iUser ) beg=[ $iUserBeg ] expiry=[ $iUserExp ] device=[ $cDevName ] profile=[ $iProfile ]") $cfgShowLogs
 
   # Set User Scheduler on-event Module
   local iEvent ("# JuanFi $iVer1 $iVer2 #\r\n".\
                 "/ip hotspot active remove [find user=\"$iUser\"]\r\n".\
+                "local iType \"Validity\"; if ([len \$1]>0) do={ set iType \$1 };\r\n".\
+                "log debug (\"JuanFi-EXP ( \$iType ) => user=[ $iUser ] ip=[ $iDevIP ] mac=[ $iDevMac ]\")\r\n".\
                 "/ip hotspot cookie remove [find user=\"$iUser\"]\r\n".\
                 "/ip hotspot cookie remove [find mac-address=\"$iDevMac\"]\r\n".\
                 "/system scheduler  remove [find name=\"$iUser\"]\r\n".\
@@ -142,7 +151,7 @@ if (!($eMail~"active")) do={
       if ([/system script find name=$iSalesName]!="") do={
         set iTotalAmt ($iSaleAmt + [tonum [/system script get [find name=$iSalesName] source]])
         /system script set [find name=$iSalesName] source="$iTotalAmt" comment=$iSalesComment
-      } else={ log error ("   ( $iUser ) ONLOGIN ERROR! /system script [$iSalesName] => SALES NOT FOUND!") }
+      } else={ log error ("   ( $iUser ) OnLogin ERROR: Sales Not Found! => /system script [$iSalesName]") }
       return $iTotalAmt
     }
     set iSalesToday [$eAddSales $iUser $iSaleAmt "SalesToday" "JuanFi Sales Today"]
@@ -151,19 +160,15 @@ if (!($eMail~"active")) do={
   # Add User Data File Module
     local eSaveData do={
       local iUser $1; local iRoot $2; local iPath $3; local iFile $4; local iContent $5
-      if ([/file find name="$iRoot"]!="") do={
-      if ([/file find name="$iRoot/$iPath"]="") do={
-        do { /tool fetch dst-path=("$iRoot/$iPath/.") url="https://127.0.0.1/" } on-error={ }
-        local i 10;while (([/file find name="$iRoot/$iPath"]="")&&($i>0)) do={set i ($i-1);delay 1s}
-      }
-      } else={ log error ("   ( $iUser ) ONLOGIN ERROR! /file [$iRoot] => ROOT NOT FOUND!") }
       if ([/file find name="$iRoot/$iPath"]!="") do={
+      if ([/file find name="$iRoot/$iPath/$iFile.txt"]="") do={
         /file print file="$iRoot/$iPath/$iFile.txt" where name="$iFile.txt"
         local i 10;while (([/file find name="$iRoot/$iPath/$iFile.txt"]="")&&($i>0)) do={set i ($i-1);delay 1s}
-      } else={ log error ("   ( $iUser ) ONLOGIN ERROR! /file [$iRoot/$iPath] => PATH NOT FOUND!") }
+      }
+      } else={ log error ("   ( $iUser ) OnLogin ERROR: Path Not Found! => /file [$iRoot/$iPath]") }
       if ([/file find name="$iRoot/$iPath/$iFile.txt"]!="") do={
         /file set "$iRoot/$iPath/$iFile.txt" contents=$iContent
-      } else={ log error ("   ( $iUser ) ONLOGIN ERROR! /file [$iRoot/$iPath/$iFile.txt] => FILE NOT FOUND!") }
+      } else={ log error ("   ( $iUser ) OnLogin ERROR: File Not Found! => /file [$iRoot/$iPath/$iFile.txt]") }
     }
     $eSaveData $iUser $iRoot "data"  ("$iFileMac")  ("$iUser#$iUserExp")
 
@@ -183,7 +188,7 @@ if (!($eMail~"active")) do={
                  "<<==[ ActiveUsers : $iUActive ]==>>")
     set iText [$eReplace ($iText) " " "%20"]
     local iURL ("https://"."api.telegram.org/bot$cfgTGBToken/sendmessage\?chat_id=$cfgTGChatID&text=$iText")
-    do { /tool fetch url=$iURL keep-result=no } on-error={ log error ("   ( $iUser ) TELEGRAM ERROR! Telegram Sending Failed") }
+    do { /tool fetch url=$iURL keep-result=no } on-error={ log error ("   ( $iUser ) Telegram ERROR: Telegram Sending Failed") }
   }
 
 }
