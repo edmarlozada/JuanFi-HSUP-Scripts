@@ -72,7 +72,7 @@ if (!($eMail~"active")) do={
   log debug ("   ( $iUser ) # Cancel User-Login if user-scheduler NOT FOUND!")
 
   # User Validity/Interval/Comment/eMail/BugFix Module
-  local cUsrTime "UNLIMITED"; local cValidty "NO-EXPIRY"
+  local cUsrTime "NO-LIMIT"; local cValidty "NO-EXPIRY"
   set iValidty ($iValidty + [/system scheduler get [find name=$iUser] interval])
   if ($iValidty!=0s && $iValidty<=$iUsrTime) do={ set iValidty ($iUsrTime+30s) }; #BugFix ( Validity <= UserTime )
   /syste scheduler set [find name=$iUser] interval=$iValidty
@@ -84,7 +84,7 @@ if (!($eMail~"active")) do={
   log debug ("   ( $iUser ) # User Validity/Interval/Comment/eMail/BugFix Module")
 
   # User Expire Module
-  local iUserBeg; local iUserExp "NO EXPIRATION"
+  local iUserBeg; local iUserExp "NO-EXPIRY"
   local aSySched [/system scheduler get $iUser]
   local iNextRun ($aSySched->"next-run")
   set   iUserBeg (($aSySched->"start-date")." ".($aSySched->"start-time"))
