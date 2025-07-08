@@ -21,8 +21,8 @@ global setDebugger do={
     [parse [/system scheduler get [find name=tester] on-event]]
   }
 
-  log info "( HotSpot ) Processing Config File..."
-  log debu "( HotSpot ) Processing Config File..."
+  log info "JuanFi onLogin Tester..."
+  log debu "JuanFi onLogin Tester..."
   /system logging action set memory memory-lines=1
   /system logging action set memory memory-lines=1000
   /system logging action set disk disk-lines-per-file=1
