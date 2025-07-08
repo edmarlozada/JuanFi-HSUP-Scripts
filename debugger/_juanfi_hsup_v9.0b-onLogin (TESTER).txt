@@ -77,7 +77,7 @@ $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 /ip hotspot active remove [find user=$xUser]
 /ip hotspot cookie remove [find user=$xUser]
 /ip hotspot cookie remove [find mac-address=$xMAC]
-/ip hotspot user set [find name=$xUser] xTime=2h xMail="extend@gmail.com" xNote="4h,0,1,Vendo-01"
+/ip hotspot user set [find name=$xUser] limit-uptime=2h email="extend@gmail.com" comment="4h,0,1,Vendo-01"
 global eUserLogin [parse [/ip hotspot user profile get [find name=$iHSUP] on-login]]
 $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 
@@ -88,7 +88,7 @@ $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 
 /ip hotspot active remove [find user=$xUser]
 /system scheduler remove [find name=$xUser]
-/ip hotspot user set [find name=$xUser] xTime=2h xMail="extend@gmail.com" xNote="4h,0,1,Vendo-01"
+/ip hotspot user set [find name=$xUser] limit-uptime=2h email="extend@gmail.com" comment="4h,0,1,Vendo-01"
 global eUserLogin [parse [/ip hotspot user profile get [find name=$iHSUP] on-login]]
 $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 
@@ -100,33 +100,33 @@ $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 # ------------------------------
 
 # blank mail ( 0 UserTime & 10s Validity )
-$setDebugger xNote="10s,0,0,Vendo-01"
+$setDebugger xTime=0 xNote="10s,0,0,Vendo-01"
 global eUserLogin [parse [/ip hotspot user profile get [find name=$iHSUP] on-login]]
 $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 
-# invalid xMail ( 0 UserTime & 10s Validity )
-$setDebugger xMail="invalid@gmail.com" xNote="10s,0,0,Vendo-01"
+# invalid mail ( 0 UserTime & 10s Validity )
+$setDebugger xTime=0 xMail="invalid@gmail.com" xNote="10s,0,0,Vendo-01"
 global eUserLogin [parse [/ip hotspot user profile get [find name=$iHSUP] on-login]]
 $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 
-# invalid active user xMail with scheduler ( 0 UserTime & 1h Validity )
-$setDebugger xMail="new@gmail.com" xNote="1h,0,0,Vendo-01"
+# test active user with invalid eMail then with/without scheduler ( 0 UserTime & 1h Validity )
+$setDebugger xTime=0 xMail="new@gmail.com" xNote="1h,0,0,Vendo-01"
 global eUserLogin [parse [/ip hotspot user profile get [find name=$iHSUP] on-login]]
 $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 
 # ( invalid xMail with scheduler )
-/ip hotspot user set [find name=$xUser] xMail="invalid@gmail.com"
+/ip hotspot user set [find name=$xUser] email="invalid@gmail.com"
 global eUserLogin [parse [/ip hotspot user profile get [find name=$iHSUP] on-login]]
 $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 
 # ( invalid xMail without scheduler )
 /system scheduler remove [find name=$xUser]
-/ip hotspot user set [find name=$xUser] xMail="invalid@gmail.com"
+/ip hotspot user set [find name=$xUser] email="invalid@gmail.com"
 global eUserLogin [parse [/ip hotspot user profile get [find name=$iHSUP] on-login]]
 $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 
 # invalid new user xNote ( 0 UserTime )
-$setDebugger xMail="new@gmail.com" xNote="invalid xNote"
+$setDebugger xTime=0 xMail="new@gmail.com" xNote="invalid xNote"
 global eUserLogin [parse [/ip hotspot user profile get [find name=$iHSUP] on-login]]
 $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 
@@ -135,7 +135,7 @@ $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 # Auto Create Sales ( 0 UserTime & 10s Validity )
 /system script remove [find name~"income"]
 /system script remove [find name~"Sales"]
-$setDebugger xTime=0 xMail="new@gmail.com" xNote="10s,0,0,Vendo-01"
+$setDebugger xTime=0 xMail="new@gmail.com" xNote="10s,1,0,Vendo-01"
 global eUserLogin [parse [/ip hotspot user profile get [find name=$iHSUP] on-login]]
 $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 

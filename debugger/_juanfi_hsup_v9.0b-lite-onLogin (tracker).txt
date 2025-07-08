@@ -47,7 +47,7 @@ if (!($eMail~"active")) do={
   # Invalid Comment Module
   if (!($iValidty>=0 && $iSaleAmt>=0 && ($iExtCode=0 || $iExtCode=1))) do={
     if ([/system scheduler find name=$iUser]!="") do={
-      log warning ("   ( $iUser ) OnLogin UPDATE: Active User Email! => email=[$iActMail] comment=[$iComment]")
+      log debug ("   ( $iUser ) OnLogin UPDATE: Active User Email! => email=[$iActMail] comment=[$iComment]")
       /ip hotspot user set [find name=$iUser] email=$iActMail; return ""
     } else={
       log error ("   ( $iUser ) OnLogin ERROR: No Scheduler/Invalid Comment! => email=[$eMail] comment=[$iComment]")
@@ -113,7 +113,7 @@ if (!($eMail~"active")) do={
     local eAddSales do={
       local iUser $1; local iSaleAmt $2; local iSalesName $3; local iSalesComment $4; local iTotalAmt 0
       if ([/system script find name=$iSalesName]="") do={
-        log warning ("   ( $iUser ) OnLogin SALES: AutoCreate! => /system script [$iSalesName]")
+        log debug ("   ( $iUser ) OnLogin SALES: AutoCreate! => /system script [$iSalesName]")
         /system script add name=$iSalesName source="0"
         local i 10;while (([/system script find name=$iSalesName]="")&&($i>0)) do={set i ($i-1);delay 1s}
       }
@@ -132,17 +132,12 @@ if (!($eMail~"active")) do={
   # Add User Data File Module
     local eSaveData do={
       local iUser $1; local iRoot $2; local iPath $3; local iFile $4; local iContent $5
-      if ([/file find name="$iRoot"]!="") do={
-      if ([/file find name="$iRoot/$iPath"]="") do={
-        log warning ("   ( $iUser ) OnLogin PATH: AutoCreate! => /file [$iRoot/$iPath/]")
-        do { /tool fetch dst-path=("$iRoot/$iPath/.") url="https://127.0.0.1/" } on-error={ }
-        local i 10;while (([/file find name="$iRoot/$iPath"]="")&&($i>0)) do={set i ($i-1);delay 1s}
-      }
-      } else={ log error ("   ( $iUser ) OnLogin ERROR: Root Not Found! => /file [$iRoot]") }
       if ([/file find name="$iRoot/$iPath"]!="") do={
-        log warning ("   ( $iUser ) OnLogin FILE: AutoCreate! => /file [$iRoot/$iPath/$iFile.txt]")
+      if ([/file find name="$iRoot/$iPath/$iFile.txt"]="") do={
+        log debug ("   ( $iUser ) OnLogin FILE: AutoCreate! => /file [$iRoot/$iPath/$iFile.txt]")
         /file print file="$iRoot/$iPath/$iFile.txt" where name="$iFile.txt"
         local i 10;while (([/file find name="$iRoot/$iPath/$iFile.txt"]="")&&($i>0)) do={set i ($i-1);delay 1s}
+      }
       } else={ log error ("   ( $iUser ) OnLogin ERROR: Path Not Found! => /file [$iRoot/$iPath]") }
       if ([/file find name="$iRoot/$iPath/$iFile.txt"]!="") do={
         /file set "$iRoot/$iPath/$iFile.txt" contents=$iContent
