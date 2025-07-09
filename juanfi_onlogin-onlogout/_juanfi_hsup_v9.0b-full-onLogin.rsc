@@ -23,7 +23,7 @@ local eMail ($aUser->"email")
 
 # Check Valid Entry via EMail
 if (!($eMail~"active")) do={
-  local eReplace do={local iRet; local x;for i from=0 to=([len $1]-1) do={set x [pick $1 $i];if ($x=$2) do={set x $3};set iRet ($iRet.$x)}; return $iRet}
+  local eReplace do={local iRet; local r;for i from=0 to=([len $1]-1) do={set r [pick $1 $i];if ($r=$2) do={set r $3};set iRet ($iRet.$r)}; return $iRet}
   local eLogDebug do={ if ($2) do={ log debug $1 } }
 
   # Variables Module
@@ -53,7 +53,7 @@ if (!($eMail~"active")) do={
   if (!($iValidty>=0 && $iSaleAmt>=0 && ($iExtCode=0 || $iExtCode=1))) do={
     do {
     if ([/system scheduler find name=$iUser]!="") do={
-      log warning ("   ( $iUser ) OnLogin UPDATE: Active User Email! => email=[$iActMail] comment=[$iComment]")
+      log debug ("   ( $iUser ) OnLogin UPDATE: Active User Email! => email=[$iActMail] comment=[$iComment]")
       /ip hotspot user set [find name=$iUser] email=$iActMail; return ""
     } else={
       log error ("   ( $iUser ) OnLogin ERROR: No Scheduler/Invalid Comment! => email=[$eMail] comment=[$iComment]")
@@ -119,6 +119,7 @@ if (!($eMail~"active")) do={
                 "if ([/system scheduler find name=\"$iUser\"]!=\"\") do={\r\n".\
                 "} else={ log error (\"   ( $iUser ) SySched ERROR! Scheduler Not Found! => /system scheduler [$iUser]\") }\r\n".\
                 "} on-error={ log error (\"   ( $iUser ) SySched ERROR! Get Users Data Module!\") }\r\n".\
+                "log debug (\"   ( $iUser ) beg=[ $iUserBeg ] expiry=[ $iUserExp ] device=[ $cDevName ]\")\r\n".\
                 "log debug (\"   ( $iUser ) usertime=[ $cUsrTime ] validity=[ $iValidty ] uptime=[ \$cUseT ]\")\r\n")
     }
     set iEvent ("$iEvent\r\n".\
@@ -142,7 +143,7 @@ if (!($eMail~"active")) do={
     local eAddSales do={
       local iUser $1; local iSaleAmt $2; local iSalesName $3; local iSalesComment $4; local iTotalAmt 0
       if ([/system script find name=$iSalesName]="") do={
-        log warning ("   ( $iUser ) OnLogin SALES: AutoCreate! => /system script [$iSalesName]")
+        log debug ("   ( $iUser ) OnLogin SALES: AutoCreate! => /system script [$iSalesName]")
         /system script add name=$iSalesName source="0"
         local i 10;while (([/system script find name=$iSalesName]="")&&($i>0)) do={set i ($i-1);delay 1s}
       }
@@ -164,14 +165,16 @@ if (!($eMail~"active")) do={
       local iUser $1; local iRoot $2; local iPath $3; local iFile $4; local iContent $5
       if ([/file find name="$iRoot"]!="") do={
       if ([/file find name="$iRoot/$iPath"]="") do={
-        log warning ("   ( $iUser ) OnLogin PATH: AutoCreate! => /file [$iRoot/$iPath/]")
+        log debug ("   ( $iUser ) OnLogin PATH: AutoCreate! => /file [$iRoot/$iPath/]")
         do { /tool fetch dst-path=("$iRoot/$iPath/.") url="https://127.0.0.1/" } on-error={ }
         local i 10;while (([/file find name="$iRoot/$iPath"]="")&&($i>0)) do={set i ($i-1);delay 1s}
       }
       } else={ log error ("   ( $iUser ) OnLogin ERROR: Root Not Found! => /file [$iRoot]") }
       if ([/file find name="$iRoot/$iPath"]!="") do={
+      if ([/file find name="$iRoot/$iPath/$iFile.txt"]="") do={
         /file print file="$iRoot/$iPath/$iFile.txt" where name="$iFile.txt"
         local i 10;while (([/file find name="$iRoot/$iPath/$iFile.txt"]="")&&($i>0)) do={set i ($i-1);delay 1s}
+      }
       } else={ log error ("   ( $iUser ) OnLogin ERROR: Path Not Found! => /file [$iRoot/$iPath]") }
       if ([/file find name="$iRoot/$iPath/$iFile.txt"]!="") do={
         /file set "$iRoot/$iPath/$iFile.txt" contents=$iContent

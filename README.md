@@ -62,7 +62,7 @@ local eMail ($aUser->"email")
 
 # Check Valid Entry via EMail
 if (!($eMail~"active")) do={
-  local eReplace do={local iRet; local x;for i from=0 to=([len $1]-1) do={set x [pick $1 $i];if ($x=$2) do={set x $3};set iRet ($iRet.$x)}; return $iRet}
+  local eReplace do={local iRet; local r;for i from=0 to=([len $1]-1) do={set r [pick $1 $i];if ($r=$2) do={set r $3};set iRet ($iRet.$r)}; return $iRet}
   local eLogDebug do={ if ($2) do={ log debug $1 } }
 
   # Variables Module
@@ -203,7 +203,7 @@ if (1) do={
 
 #### Step 2: Copy script below and paste to hotspot user profile onLogout. ( _juanfi_hs_v9.0b-lite-onLogout.txt )
 ```bash
-# JuanFi onLogout v9.0b lite
+# JuanFi onLogout v9.0a lite
 # by: Chloe Renae & Edmar Lozada
 # ------------------------------
 

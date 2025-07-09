@@ -146,3 +146,8 @@ $setDebugger xTime=0 xMail="new@gmail.com" xNote="10s,0,0,Vendo-01"
 global eUserLogin [parse [/ip hotspot user profile get [find name=$iHSUP] on-login]]
 $eUserLogin username=$xUser address=$xAddr mac-address=$xMAC interface=$xDInt
 
+if ([/system scheduler find name="<JuanFi-Reset-Sales>"]!="") do={
+  [parse [/system scheduler get [find name="<JuanFi-Reset-Sales>"] on-event]]
+}
+
+# ------------------------------
