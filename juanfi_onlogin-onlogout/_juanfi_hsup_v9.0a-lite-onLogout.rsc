@@ -9,5 +9,6 @@ local iUseTime ($aUser->"uptime")
 
 # Check Expiration
 if ($cause="traffic limit reached" || (($iUsrTime>0) && ($iUsrTime<=$iUseTime))) do={
-  [parse [/system scheduler get [find name=$iUser] on-event]]
+  local iSSched [parse [/system scheduler get [find name=$iUser] on-event]]
+  $iSSched "TimeLimit"
 }
