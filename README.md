@@ -79,7 +79,7 @@ if (!($eMail~"active")) do={
   local iExtCode ($aComment->2)
   local iVendTag ($aComment->3)
   local iFileMac [$eReplace $iDevMac ":" ""]
-  local iActMail "$iFileMac@juanfi.$iVer1.active"
+  local iActMail ("$iFileMac@juanfi.$iVer1.active")
   local iRoot    [/ip hotspot profile get [.. get [find interface=$iDevInt] profile] html-directory]
   local iType "NEW"; if ($iExtCode=1) do={ set iType "EXT" }
   $eLogDebug ("JuanFi-$iType => user=[ $iUser ] ip=[ $iDevIP ] mac=[ $iDevMac ] interface=[ $iDevInt ] comment=[ $iComment ]") $cfgShowLogs
