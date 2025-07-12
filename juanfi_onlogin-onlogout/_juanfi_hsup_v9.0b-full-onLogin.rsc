@@ -197,7 +197,7 @@ if (!($eMail~"active")) do={
                  "User Time : $cUsrTime%0A".\
                  "Validity : $cValidty%0A".\
                  "Dev IP : $iDevIP%0A".\
-                 "Dev MAC : $iDevMac".\
+                 "Dev MAC : $iDevMac%0A".\
                  "Dev : $cDevName%0A")
     if ($cfgAddSales) do={
       set iText ("$iText%0A%0A".\

@@ -144,10 +144,6 @@ if (!($eMail~"active")) do={
   local iSalesToday; local iSalesMonth
     local eAddSales do={
       local iUser $1; local iSaleAmt $2; local iSalesName $3; local iSalesComment $4; local iTotalAmt 0
-      if ([/system script find name=$iSalesName]="") do={
-        /system script add name=$iSalesName source="0"
-        local i 10;while (([/system script find name=$iSalesName]="")&&($i>0)) do={set i ($i-1);delay 1s}
-      }
       if ([/system script find name=$iSalesName]!="") do={
         set iTotalAmt ($iSaleAmt + [tonum [/system script get [find name=$iSalesName] source]])
         /system script set [find name=$iSalesName] source="$iTotalAmt" comment=$iSalesComment

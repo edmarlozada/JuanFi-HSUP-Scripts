@@ -98,8 +98,8 @@ if (!($eMail~"active")) do={
   # Set User Scheduler on-event Module
   local iEvent ("# JuanFi $iVer1 $iVer2 #\r\n".\
                 "/ip hotspot active remove [find user=\"$iUser\"]\r\n".\
-                "local iType \"Validity\"; if ([len \$1]>0) do={ set iType \$1 };\r\n".\
-                "log debug (\"JuanFi-EXP ( \$iType ) => user=[ $iUser ] ip=[ $iDevIP ] mac=[ $iDevMac ]\")\r\n".\
+                "local iExp \"Validity\"; if ([len \$1]>0) do={ set iExp \$1 };\r\n".\
+                "log debug (\"JuanFi-EXP ( \$iExp ) => user=[ $iUser ] ip=[ $iDevIP ] mac=[ $iDevMac ]\")\r\n".\
                 "/ip hotspot cookie remove [find user=\"$iUser\"]\r\n".\
                 "/ip hotspot cookie remove [find mac-address=\"$iDevMac\"]\r\n".\
                 "/system scheduler  remove [find name=\"$iUser\"]\r\n".\
@@ -112,11 +112,6 @@ if (!($eMail~"active")) do={
   local iSalesToday; local iSalesMonth; local iSalesTotal
     local eAddSales do={
       local iUser $1; local iSaleAmt $2; local iSalesName $3; local iSalesComment $4; local iTotalAmt 0
-      if ([/system script find name=$iSalesName]="") do={
-        log debug ("   ( $iUser ) OnLogin SALES: AutoCreate! => /system script [$iSalesName]")
-        /system script add name=$iSalesName source="0"
-        local i 10;while (([/system script find name=$iSalesName]="")&&($i>0)) do={set i ($i-1);delay 1s}
-      }
       if ([/system script find name=$iSalesName]!="") do={
         log debug ("   ( $iUser ) iSalesName=[ $iSalesName ] OldAmt=[ $[/system script get [find name=$iSalesName] source] ]")
         set iTotalAmt ($iSaleAmt + [tonum [/system script get [find name=$iSalesName] source]])
@@ -156,10 +151,10 @@ if (!($eMail~"active")) do={
                  "User Time : $cUsrTime%0A".\
                  "Validity : $cValidty%0A".\
                  "Dev IP : $iDevIP%0A".\
-                 "Dev MAC : $iDevMac".\
+                 "Dev MAC : $iDevMac%0A".\
                  "Sales Amount : $iSaleAmt%0A".\
-                 "Sales Total (Today) : $iSalesToday%0A".\
-                 "Sales Total (Month) : $iSalesMonth%0A".\
+                 "Sales (Today) : $iSalesToday%0A".\
+                 "Sales (Month) : $iSalesMonth%0A".\
                  "<<==[ ActiveUsers : $iUActive ]==>>")
     set iText [$eReplace ($iText) " " "%20"]
     local iURL ("https://"."api.telegram.org/bot$cfgTGBToken/sendmessage\?chat_id=$cfgTGChatID&text=$iText")
