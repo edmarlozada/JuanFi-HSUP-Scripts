@@ -40,13 +40,13 @@ if (!($eMail~"active")) do={
   local iExtCode ($aComment->2)
   local iVendTag ($aComment->3)
   local iFileMac [$eReplace $iDevMac ":" ""]
-  local iActMail "$iFileMac@juanfi.$iVer1.active"
+  local iActMail ("$iFileMac@juanfi.$iVer1.active")
   local iRoot    [/ip hotspot profile get [.. get [find interface=$iDevInt] profile] html-directory]
+  local iType    "NEW"; if ($iExtCode=1) do={ set iType "EXT" }
   local iDevName; local cDevName "-none-"
   if ([/ip dhcp-server lease find address=$iDevIP]!="") do={
     set iDevName [/ip dhcp-server lease get [find address=$iDevIP] host-name]
   }; if ([len $iDevName]>0) do={ set cDevName $iDevName }
-  local iType "NEW"; if ($iExtCode=1) do={ set iType "EXT" }
   $eLogDebug ("JuanFi-$iType => user=[ $iUser ] ip=[ $iDevIP ] mac=[ $iDevMac ] interface=[ $iDevInt ] comment=[ $iComment ]") $cfgShowLogs
 
   # Invalid Comment Module
