@@ -38,9 +38,9 @@
 
 ### Follow these steps:
 
-#### Step 1: Copy script below and paste to hotspot user profile onLogin. ( _juanfi_hs_v9.0b-lite-onLogin.rsc )
+#### Step 1: Copy script below and paste to hotspot user profile onLogin. ( _juanfi_hs_v9.0c-starter-onLogin.rsc )
 ```bash
-# JuanFi onLogin v9.0b lite
+# JuanFi onLogin v9.0b starter
 # by: Chloe Renae & Edmar Lozada
 # ------------------------------
 
@@ -197,9 +197,9 @@ if (1) do={
 
 ```
 
-#### Step 2: Copy script below and paste to hotspot user profile onLogout. ( _juanfi_hs_v9.0b-lite-onLogout.rsc )
+#### Step 2: Copy script below and paste to hotspot user profile onLogout. ( _juanfi_hs_v9.0c-starter-onLogout.rsc )
 ```bash
-# JuanFi onLogout v9.0a lite
+# JuanFi onLogout v9.0a starter
 # by: Chloe Renae & Edmar Lozada
 # ------------------------------
 
