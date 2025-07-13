@@ -38,9 +38,9 @@
 
 ### Follow these steps:
 
-#### Step 1: Copy script below and paste to hotspot user profile onLogin. ( _juanfi_hs_v9.0c-starter-onLogin.rsc )
+#### Step 1: Copy script below and paste to hotspot user profile onLogin.
 ```bash
-# JuanFi onLogin v9.0b starter
+# JuanFi onLogin v9.0b experts
 # by: Chloe Renae & Edmar Lozada
 # ------------------------------
 
@@ -197,9 +197,9 @@ if (1) do={
 
 ```
 
-#### Step 2: Copy script below and paste to hotspot user profile onLogout. ( _juanfi_hs_v9.0c-starter-onLogout.rsc )
+#### Step 2: Copy script below and paste to hotspot user profile onLogout.
 ```bash
-# JuanFi onLogout v9.0a starter
+# JuanFi onLogout v9.0a experts
 # by: Chloe Renae & Edmar Lozada
 # ------------------------------
 
@@ -216,7 +216,7 @@ if ($cause="traffic limit reached" || (($iUsrTime>0) && ($iUsrTime<=$iUseTime)))
 
 ```
 
-#### Step 3: Copy script below and paste to winbox terminal ( _juanfi_sysched_sales_reset.rsc )
+#### Step 3: Copy script below and paste to winbox terminal.
 ```bash
 # ==============================
 # JuanFi Reset Daily/Monthly Sales
