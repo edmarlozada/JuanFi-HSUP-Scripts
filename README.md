@@ -1,4 +1,4 @@
-## JuanFi onLogin/onLogout v9.0c ( lite )
+## JuanFi onLogin/onLogout v9.0c ( expert )
 - no need to define hotspot folder! (copyright)
 
 ### What's new (2025-07-09)
@@ -7,7 +7,7 @@
 - cancel user-login if scheduler not created
 - cancel user-login if invalid user comment
 
-### What's in v9.0c ( lite )
+### What's in v9.0c ( expert )
 - system scheduler on-event minimize/with logs
 - fix bug on validity ( if Validity <= UserTime )
 - create logs for New/Extend user
