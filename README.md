@@ -40,7 +40,7 @@
 
 #### Step 1: Copy script below and paste to hotspot user profile onLogin.
 ```bash
-# JuanFi onLogin v9.0b experts
+# JuanFi onLogin v9.0c experts
 # by: Chloe Renae & Edmar Lozada
 # ------------------------------
 
@@ -199,7 +199,7 @@ if (1) do={
 
 #### Step 2: Copy script below and paste to hotspot user profile onLogout.
 ```bash
-# JuanFi onLogout v9.0a experts
+# JuanFi onLogout v9.0c experts
 # by: Chloe Renae & Edmar Lozada
 # ------------------------------
 
