@@ -1,4 +1,4 @@
-# JuanFi onLogin v9.0b starter
+# JuanFi onLogin v9.0c starter
 # by: Chloe Renae & Edmar Lozada
 # ------------------------------
 
@@ -27,7 +27,7 @@ if (!($eMail~"active")) do={
   local eLogDebug do={ if ($2) do={ log debug $1 } }
 
   # Variables Module
-  local iVer1 "v9.0b"; local iVer2 "full"
+  local iVer1 "v9.0c"; local iVer2 "full"
   local iDevIP   $address
   local iDevMac  $"mac-address"
   local iDevInt  $interface

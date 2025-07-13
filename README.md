@@ -1,4 +1,4 @@
-## JuanFi onLogin/onLogout v9.0b ( lite )
+## JuanFi onLogin/onLogout v9.0c ( lite )
 - no need to define hotspot folder! (copyright)
 
 ### What's new (2025-07-09)
@@ -7,7 +7,7 @@
 - cancel user-login if scheduler not created
 - cancel user-login if invalid user comment
 
-### What's in v9.0b ( lite )
+### What's in v9.0c ( lite )
 - system scheduler on-event minimize/with logs
 - fix bug on validity ( if Validity <= UserTime )
 - create logs for New/Extend user
@@ -66,7 +66,7 @@ if (!($eMail~"active")) do={
   local eLogDebug do={ if ($2) do={ log debug $1 } }
 
   # Variables Module
-  local iVer1 "v9.0b"; local iVer2 "lite"
+  local iVer1 "v9.0c"; local iVer2 "lite"
   local iDevIP   $address
   local iDevMac  $"mac-address"
   local iDevInt  $interface

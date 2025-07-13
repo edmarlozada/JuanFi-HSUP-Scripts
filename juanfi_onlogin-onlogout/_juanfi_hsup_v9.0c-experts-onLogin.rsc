@@ -1,4 +1,4 @@
-# JuanFi onLogin v9.0b experts
+# JuanFi onLogin v9.0c experts
 # by: Chloe Renae & Edmar Lozada
 # ------------------------------
 
@@ -24,7 +24,7 @@ if (!($eMail~"active")) do={
   local eLogDebug do={ if ($2) do={ log debug $1 } }
 
   # Variables Module
-  local iVer1 "v9.0b"; local iVer2 "lite"
+  local iVer1 "v9.0c"; local iVer2 "lite"
   local iDevIP   $address
   local iDevMac  $"mac-address"
   local iDevInt  $interface
